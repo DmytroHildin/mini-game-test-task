@@ -21,4 +21,8 @@ export class GameGrid implements OnInit {
                           () => Array(this.GRID_SIZE).fill(0)
                         ) 
     }
+
+    handleClickOnCell(): void {
+        console.log('111');
+    }
 }

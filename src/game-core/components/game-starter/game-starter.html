@@ -1,0 +1,32 @@
+<div class="game-starter">
+    <form class="form" 
+          [formGroup]="gameStarterForm" 
+          (ngSubmit)="startGame()">
+        <label for="time">
+            <input type="number"
+                id="time"
+                formControlName="time"
+                min="1500"
+                placeholder="Set picking time"
+                class="form__input"
+                [class.form__input--invalid]="time?.invalid && (time?.dirty || time?.touched)"/>
+
+            @if (time?.invalid && (time?.dirty || time?.touched)) {
+                <div class="form__error">
+                    @if (time?.hasError('required')) {
+                        Please, set time in ms
+                    }
+                    @if (time?.hasError('min')) {
+                        It's physically impossible!
+                    }
+                    @if (time?.hasError('max')) {
+                        Don't relax there at all!
+                    }
+                </div>
+            }
+        </label>
+        
+        <button class="btn game-starter-btn" [disabled]="!gameStarterForm.valid">Start</button>
+    </form>
+    
+</div>
