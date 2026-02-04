@@ -2,8 +2,8 @@
     @for (row of gameGrid; track $index) {
         <div class="game-grid__row">
             @for (cell of row; track $index) {
-                <div class="game-grid__cell" (click)="handleClickOnCell()">
-                    {{cell}}
+                <div class="game-grid__cell" (click)="handleClickOnCell(cell)">
+                    
                 </div>
             }
         </div>

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
+import { GameService } from '../../services/game.service';
+
 @Component({
   selector: 'app-game-starter',
   imports: [
@@ -10,6 +12,10 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './game-starter.scss',
 })
 export class GameStarter {
+
+    constructor(private gameService: GameService) {
+
+    }
 
     public gameStarterForm = new FormGroup({
         time: new FormControl('', [Validators.required, 
@@ -23,5 +29,7 @@ export class GameStarter {
 
     public startGame() {
         console.log('start');
+
+        this.gameService.setGameStatus('playing');
     }
 }

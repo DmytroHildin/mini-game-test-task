@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CellState } from '../../interfaces';
+import { GameService } from '../../services/game.service';
 
 @Component({
   selector: 'app-game-grid',
@@ -9,20 +11,36 @@ import { Component, OnInit } from '@angular/core';
 export class GameGrid implements OnInit {
     readonly GRID_SIZE = 10;
 
-    public gameGrid: number[][] = [];
+    public gameGrid: CellState[][] = [];
+
+    constructor(private gameService: GameService) {
+    }
 
     ngOnInit(): void {
         this.gameGrid = this.initGameGrid();
         console.log(this.gameGrid);
+
+        this.gameService.gameStatus$.subscribe(status => {
+            if (status === 'playing') {
+                console.log(status);
+                this.startNextRound();
+            }
+        })
     }
 
-    initGameGrid(): number[][] {
+    initGameGrid(): CellState[][] {
         return Array.from({ length: this.GRID_SIZE }, 
-                          () => Array(this.GRID_SIZE).fill(0)
+                          (_, row) => Array.from({ length: this.GRID_SIZE }, 
+                                                 (_, col) => ({id: row * this.GRID_SIZE + col, status: 'disabled'}))
                         ) 
     }
 
-    handleClickOnCell(): void {
-        console.log('111');
+    handleClickOnCell(cell: CellState): void {
+        console.log(cell);
+    }
+
+    private startNextRound() {
+        const activeCellId = this.gameService.chooseRandomCellId();
+        console.log(activeCellId);
     }
 }
