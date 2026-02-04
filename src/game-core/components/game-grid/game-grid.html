@@ -1,0 +1,11 @@
+<div class="game-grid">
+    @for (row of gameGrid; track $index) {
+        <div class="game-grid__row">
+            @for (cell of row; track $index) {
+                <div class="game-grid__cell">
+                    {{cell}}
+                </div>
+            }
+        </div>
+    }
+</div>
