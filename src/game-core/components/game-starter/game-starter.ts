@@ -19,8 +19,8 @@ export class GameStarter {
 
     public gameStarterForm = new FormGroup({
         time: new FormControl('', [Validators.required, 
-                                   Validators.min(1500),
-                                   Validators.max(3000)])
+                                   Validators.min(900),
+                                   Validators.max(1500)])
     });
 
     get time() {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CellState, CellStatus } from '../../interfaces';
+import { CellState, CellStatus, GameStatus } from '../../interfaces';
 import { GameService } from '../../services/game.service';
 import { delay, of, race, repeat, Subject, switchMap, takeWhile, tap, timer } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -15,7 +15,8 @@ export class GameGrid implements OnInit {
 
     public gameGrid: CellState[][] = [];
     private timeInMs: number = 0;
-    private selectedCellId!: number;
+    public selectedCellId: number|null = null;
+    public gameStatus!: GameStatus
 
     private cellClicked$!: Subject<void>;
 
@@ -29,6 +30,8 @@ export class GameGrid implements OnInit {
         this.gameService.timeInMs$.subscribe(ms => this.timeInMs = ms);
 
         this.gameService.gameStatus$.subscribe(status => {
+            this.gameStatus = status;
+
             if (status === 'playing') {
                 console.log(status);
                 this.startNewGame();
@@ -47,7 +50,7 @@ export class GameGrid implements OnInit {
         of({})
           .pipe(
               switchMap(() => this.startNextRound()),
-              repeat({ delay: 200 }),
+              repeat({ delay: 300 }),
               takeWhile(() => !this.gameService.isGameOver())
           )
           .subscribe(() => {
@@ -59,6 +62,7 @@ export class GameGrid implements OnInit {
 
     handleClickOnCell(cell: CellState): void {
         console.log(cell);
+        if (this.gameStatus === 'disabled') return;
         // if (cell.status !== 'active') return;
 
         this.selectedCellId = cell.id;
@@ -70,6 +74,8 @@ export class GameGrid implements OnInit {
     private startNextRound() {
         console.log('NEXT ROUND START')
         this.cellClicked$ = new Subject();
+
+        this.selectedCellId = null;
         const activeCellId = this.gameService.chooseRandomCellId();
         // this.setCellStatus(activeCellId, 'active');
         // console.log(activeCellId);

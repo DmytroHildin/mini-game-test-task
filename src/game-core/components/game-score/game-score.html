@@ -1,5 +1,5 @@
 <div class="game-score">
-    <span>{{ (gameScore$ | async)?.player }}</span>
+    <span class="game-score__value">{{ (gameScore$ | async)?.player }}</span>
     <span>-</span>
-    <span>{{ (gameScore$ | async)?.computer }}</span>
+    <span class="game-score__value">{{ (gameScore$ | async)?.computer }}</span>
 </div>

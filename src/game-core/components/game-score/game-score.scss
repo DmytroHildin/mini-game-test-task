@@ -1,0 +1,11 @@
+.game-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 15px;
+    color: #444;
+
+    &__value {
+        font-size: 55px;
+    }
+}

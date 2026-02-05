@@ -9,20 +9,57 @@
         align-items: center;
         width: 60px;
         height: 60px;
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        background: linear-gradient(135deg, #0f5ce1 0%, #153a7d 100%);
         border: 1px solid #fff;
+        border-radius: 5px;
+        will-change: rotate;
         transition: all .18s;
+        cursor: grab;
+        opacity: .95;
 
         &--active {
             background: linear-gradient(135deg, #f8ff00 0%, #f1c40f 100%);
+            box-shadow: 0 0 15px 5px rgba(255, 255, 0, 0.7);
+            opacity: 1;
         }
 
         &--failed {
-            background: linear-gradient(135deg, #ff512f 0%, #dd2476 100%);
+            background: linear-gradient(135deg, #ff512f 0%, #ff0000 100%);
+            opacity: 1;
         }
 
         &--success {
-            background: linear-gradient(135deg, #a8ff78 0%, #2bd62b 100%);
+            background: linear-gradient(135deg, #5bff00 0%, #208520 100%);
+            opacity: 1;
         }
+
+        &--selected {
+            &:not(
+                .game-grid__cell--active, 
+                .game-grid__cell--failed, 
+                .game-grid__cell--success
+            ) {
+                animation: shake .2s;
+            }
+        }
+
+        &:hover {
+            &:not(
+                .game-grid__cell--active, 
+                .game-grid__cell--failed, 
+                .game-grid__cell--success
+            ) {
+                background: linear-gradient(135deg, #0a1577 0%, #004e92 100%);
+            }
+        }
+    }
+    
+    &--disabled {
+        .game-grid__cell {
+            background: #808080;
+            opacity: .5;
+            cursor: default;
+        }
+
     }
 }

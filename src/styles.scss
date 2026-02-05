@@ -5,7 +5,11 @@
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-} 
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
  
  main {
     width: 100%;
@@ -49,4 +53,11 @@
         font-size: 13px;
         color: red
     }
+}
+
+@keyframes shake {
+    0% { rotate: 0deg; }
+    25% { rotate: -5deg; }
+    75% { rotate: 5deg; }
+    100% { rotate: 0deg; }
 }
