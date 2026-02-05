@@ -11,5 +11,18 @@
         height: 60px;
         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
         border: 1px solid #fff;
+        transition: all .18s;
+
+        &--active {
+            background: linear-gradient(135deg, #f8ff00 0%, #f1c40f 100%);
+        }
+
+        &--failed {
+            background: linear-gradient(135deg, #ff512f 0%, #dd2476 100%);
+        }
+
+        &--success {
+            background: linear-gradient(135deg, #a8ff78 0%, #2bd62b 100%);
+        }
     }
 }

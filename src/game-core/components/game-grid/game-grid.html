@@ -2,8 +2,11 @@
     @for (row of gameGrid; track $index) {
         <div class="game-grid__row">
             @for (cell of row; track $index) {
-                <div class="game-grid__cell" (click)="handleClickOnCell(cell)">
-                    
+                <div class="game-grid__cell"
+                    [class.game-grid__cell--active]="cell.status === 'active'"
+                    [class.game-grid__cell--failed]="cell.status === 'failed'"
+                    [class.game-grid__cell--success]="cell.status === 'success'"  
+                    (click)="handleClickOnCell(cell)">
                 </div>
             }
         </div>

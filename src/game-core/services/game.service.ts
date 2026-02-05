@@ -8,6 +8,9 @@ import { GameStatus, Score } from '../interfaces';
 })
 export class GameService {
   
+    readonly WIN_SCORE: number = 10;
+
+    private timeInMs = new BehaviorSubject<number>(0);
     private score = new BehaviorSubject<Score>({player: 0, computer: 0});
     private gameStatus = new BehaviorSubject<GameStatus>('disabled');
 
@@ -19,11 +22,20 @@ export class GameService {
         return this.gameStatus.asObservable();
     }
 
+    get timeInMs$(): Observable<number> {
+        return this.timeInMs.asObservable();
+    }
+
+    setTime(ms: number) {
+        this.timeInMs.next(ms);
+    }
+
     setScore(scorer: 'player' | 'computer'): void {
         const currentScore: Score = this.score.value;
+        console.log(scorer);
         this.score.next({
             ...currentScore, 
-            [scorer]: currentScore[scorer]++
+            [scorer]: ++currentScore[scorer]
         })
     }
 
@@ -32,6 +44,11 @@ export class GameService {
     }
 
     chooseRandomCellId(): number {
-        return Math.floor(Math.random() * 101);
+        return Math.floor(Math.random() * 100);
+    }
+
+    isGameOver(): boolean {
+        const { player, computer } = this.score.value;
+        return player === this.WIN_SCORE || computer === this.WIN_SCORE;
     }
 }
