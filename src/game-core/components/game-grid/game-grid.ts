@@ -15,6 +15,7 @@ export class GameGrid implements OnInit {
 
     public gameGrid: CellState[][] = [];
     private timeInMs: number = 0;
+    private selectedCellId!: number;
 
     private cellClicked$!: Subject<void>;
 
@@ -43,10 +44,10 @@ export class GameGrid implements OnInit {
     }
 
     private startNewGame() {
-        of(null)
+        of({})
           .pipe(
               switchMap(() => this.startNextRound()),
-              repeat({ delay: 300 }),
+              repeat({ delay: 200 }),
               takeWhile(() => !this.gameService.isGameOver())
           )
           .subscribe(() => {
@@ -58,7 +59,9 @@ export class GameGrid implements OnInit {
 
     handleClickOnCell(cell: CellState): void {
         console.log(cell);
-        if (cell.status !== 'active') return;
+        // if (cell.status !== 'active') return;
+
+        this.selectedCellId = cell.id;
         
         this.cellClicked$.next();  
         this.cellClicked$.complete();      
@@ -88,8 +91,8 @@ export class GameGrid implements OnInit {
             this.cellClicked$.pipe(
                 tap(() => {
                     console.log('CLICKED IN RACE')
-                    this.gameService.setScore('player');
-                    this.setCellStatus(activeCellId, 'success');
+                    this.gameService.setScore(this.selectedCellId === activeCellId ? 'player' : 'computer');
+                    this.setCellStatus(activeCellId, this.selectedCellId === activeCellId ? 'success' : 'failed');
                 })
             ),
             timer(this.timeInMs).pipe(

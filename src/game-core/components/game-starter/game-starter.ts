@@ -30,6 +30,7 @@ export class GameStarter {
     public startGame() {
         console.log('start');
         this.gameService.setTime(+(this.time?.value ?? 0));
+        this.gameService.resetScore();
         this.gameService.setGameStatus('playing');
     }
 }
