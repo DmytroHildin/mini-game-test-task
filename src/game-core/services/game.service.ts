@@ -32,11 +32,15 @@ export class GameService {
 
     setScore(scorer: 'player' | 'computer'): void {
         const currentScore: Score = this.score.value;
-        console.log(scorer);
+        
         this.score.next({
             ...currentScore, 
             [scorer]: ++currentScore[scorer]
         })
+    }
+
+    resetScore() {
+        this.score.next({player: 0, computer: 0});
     }
 
     setGameStatus(status: GameStatus): void {

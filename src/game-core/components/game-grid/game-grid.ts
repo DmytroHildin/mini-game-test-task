@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CellState, CellStatus } from '../../interfaces';
 import { GameService } from '../../services/game.service';
-import { Subject, takeUntil, timer } from 'rxjs';
+import { delay, of, race, repeat, Subject, switchMap, takeWhile, tap, timer } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -16,7 +16,7 @@ export class GameGrid implements OnInit {
     public gameGrid: CellState[][] = [];
     private timeInMs: number = 0;
 
-    private cellClicked$ = new Subject<void>();
+    private cellClicked$!: Subject<void>;
 
     constructor(private gameService: GameService) {
     }
@@ -30,7 +30,7 @@ export class GameGrid implements OnInit {
         this.gameService.gameStatus$.subscribe(status => {
             if (status === 'playing') {
                 console.log(status);
-                this.startNextRound();
+                this.startNewGame();
             }
         })
     }
@@ -42,38 +42,63 @@ export class GameGrid implements OnInit {
                         ) 
     }
 
+    private startNewGame() {
+        of(null)
+          .pipe(
+              switchMap(() => this.startNextRound()),
+              repeat({ delay: 300 }),
+              takeWhile(() => !this.gameService.isGameOver())
+          )
+          .subscribe(() => {
+              if (this.gameService.isGameOver()) {
+                  this.finishGame();
+              }
+          });
+    }
+
     handleClickOnCell(cell: CellState): void {
         console.log(cell);
         if (cell.status !== 'active') return;
         
-        this.cellClicked$.next();
-        this.gameService.setScore('player');
-        this.setCellStatus(cell.id, 'success');
-
-        timer(500).subscribe(() => this.startNextRound());        
+        this.cellClicked$.next();  
+        this.cellClicked$.complete();      
     }
 
     private startNextRound() {
-        if (this.gameService.isGameOver()) {
-            this.finishGame();
-            return;
-        }
-
+        console.log('NEXT ROUND START')
+        this.cellClicked$ = new Subject();
         const activeCellId = this.gameService.chooseRandomCellId();
-        this.setCellStatus(activeCellId, 'active');
-        console.log(activeCellId);
+        // this.setCellStatus(activeCellId, 'active');
+        // console.log(activeCellId);
 
-        timer(this.timeInMs)
-            .pipe(
-                takeUntil(this.cellClicked$)
+        // timer(this.timeInMs)
+        //     .pipe(
+        //         takeUntil(this.cellClicked$)
+        //     )
+        //     .subscribe(() => {
+        //         console.log('failed')
+        //         this.gameService.setScore('computer');
+        //         this.setCellStatus(activeCellId, 'failed');
+
+        //         this.startNextRound();
+        //     })
+        this.setCellStatus(activeCellId, 'active')
+
+        return race(
+            this.cellClicked$.pipe(
+                tap(() => {
+                    console.log('CLICKED IN RACE')
+                    this.gameService.setScore('player');
+                    this.setCellStatus(activeCellId, 'success');
+                })
+            ),
+            timer(this.timeInMs).pipe(
+                tap(() => {
+                    this.gameService.setScore('computer');
+                    this.setCellStatus(activeCellId, 'failed');
+                })
             )
-            .subscribe(() => {
-                console.log('failed')
-                this.gameService.setScore('computer');
-                this.setCellStatus(activeCellId, 'failed');
-
-                this.startNextRound();
-            })
+        )
     }
 
     private setCellStatus(id: number, status: CellStatus): void {
