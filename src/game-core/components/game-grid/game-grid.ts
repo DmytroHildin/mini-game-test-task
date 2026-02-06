@@ -6,6 +6,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModalService } from '../../../ui/services/modal.service';
 import { GameScore } from '../game-score/game-score';
 import { GameResults } from '../game-results/game-results';
+import { ModalRef } from '../../../ui/injectors/modal-ref';
 
 @Component({
   selector: 'app-game-grid',
@@ -124,13 +125,14 @@ export class GameGrid implements OnInit {
           )
     }
 
-    private finishGame() {
+    private finishGame(): void {
         this.gameService.setGameStatus('gameover');
-        console.log('finishGame')
-        this.modalService.open(GameResults);
-    }
+        const modalRef: ModalRef = this.modalService.open(GameResults);
 
-    modalTest() {
-        this.modalService.open(GameResults);
+        modalRef.onClose().subscribe(source => {
+            if (source !== 'content') {
+                this.gameService.resetGame();
+            }            
+        })
     }
 }

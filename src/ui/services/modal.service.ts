@@ -8,7 +8,6 @@ import { ModalRef } from '../injectors/modal-ref';
   providedIn: 'root'
 })
 export class ModalService {
-    //private modals: ModalInstance[] = [];
 
     constructor(
         private appRef: ApplicationRef,
@@ -16,11 +15,7 @@ export class ModalService {
         private injector: Injector
     ) { }
 
-    open<T>(
-        content: Type<T>, 
-        modalOptions?: any,
-        data?: any
-    ) {
+    open<T>(content: Type<T>): ModalRef {
         const modalRef = new ModalRef();
 
         const modalWrapperInstance = createComponent(ModalWrapperComponent, {
@@ -36,11 +31,7 @@ export class ModalService {
         document.body.appendChild(modalWrapperInstance.location.nativeElement);
 
         modalWrapperInstance.instance.containerReady.subscribe(container => {
-          const contentRef = modalWrapperInstance.instance.container.createComponent(content);
-
-          if (data) {
-              Object.assign(contentRef.instance as object, data);
-          }
+            const contentRef = modalWrapperInstance.instance.container.createComponent(content);
         });
 
         // set to microtask 
@@ -48,10 +39,10 @@ export class ModalService {
             modalWrapperInstance.instance.isOpen = true
         })     
         
-        modalRef.onClose.pipe(
+        modalRef.onCloseRequested().pipe(
             takeUntil(modalWrapperInstance.instance.destroySubject$)
         )
-        .subscribe(() => modalWrapperInstance.instance.close());
+        .subscribe(source => modalWrapperInstance.instance.close(source));
 
         modalWrapperInstance.instance.afterModalClose.pipe(
             takeUntil(modalWrapperInstance.instance.destroySubject$)
@@ -64,7 +55,7 @@ export class ModalService {
         return modalRef;
     }
 
-    destroyInstance(modalInstance: ComponentRef<ModalWrapperComponent>) {
+    destroyInstance(modalInstance: ComponentRef<ModalWrapperComponent>): void {
         this.appRef.detachView(modalInstance.hostView);
         modalInstance.destroy();
     }

@@ -6,7 +6,7 @@
             <input type="number"
                 id="time"
                 formControlName="time"
-                placeholder="Set picking time"
+                placeholder="Set picking time (ms)"
                 class="form__input"
                 [class.form__input--invalid]="time?.invalid && (time?.dirty || time?.touched)"/>
 
@@ -19,7 +19,7 @@
                         It's physically impossible!
                     }
                     @if (time?.hasError('max')) {
-                        Don't relax there at all!
+                        Well that's too easy!
                     }
                 </div>
             }

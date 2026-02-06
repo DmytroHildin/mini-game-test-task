@@ -1,14 +1,12 @@
-<div class="overlay" [@fadeOverlay]="isOpen ? 'open' : 'close'" (click)="close()"></div>
+<div class="overlay" 
+    [@fadeOverlay]="isOpen ? 'open' : 'close'" 
+    (click)="close('wrapper')"></div>
 <div class="modal fancy-modal" 
     [@fadeInOut]="isOpen ? 'open' : 'close'"
     (@fadeInOut.done)="onAnimationDone($event)">
-        <button class="close-btn" (click)="close()">X</button>
-        <!-- <div class="modal-header" 
-             *ngIf="modalOptions && modalOptions.title">
-            <h2 class="modal-header__title">{{ modalOptions.title }}</h2>
-        </div> -->
-        
+        <button class="close-btn" 
+                (click)="close('wrapper')">X</button>
         <div class="modal-content">
             <ng-container #container></ng-container>
-        </div>        
+        </div>
 </div>

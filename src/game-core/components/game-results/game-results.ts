@@ -26,6 +26,6 @@ export class GameResults implements OnInit {
 
     restartGame(): void {
         this.gameService.refreshGame();
-        this.modalRef.close();
+        this.modalRef.requestClose('content');
     }
 }

@@ -39,13 +39,6 @@
     border-radius: 5px;
     cursor: pointer;
 
-    &:disabled {
-        color: #808080;
-        background-color: rgba(128, 128, 128, .3);
-        border: 1px solid #808080;
-        cursor: not-allowed;
-    }
-
     &--sega {
         font-family: "Sega Arcade";
         font-size: 24px;
@@ -54,6 +47,26 @@
         padding: 12px 15px;
         margin-top: 10px;
         border: 2px solid #000;
+        transition: all .24s;
+
+        &:hover,
+        &:focus {
+            color: #fff;
+            background-color: #000;
+        }
+    }
+
+    &:disabled {
+        color: #808080;
+        background-color: rgba(128, 128, 128, .3);
+        border: 1px solid #808080;
+        cursor: not-allowed;
+
+        &:hover,
+        &:focus {
+            color: #808080;
+            background-color: rgba(128, 128, 128, .3);
+        }
     }
 }
 

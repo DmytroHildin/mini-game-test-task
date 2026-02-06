@@ -2,6 +2,8 @@ import { Component, ElementRef, EventEmitter, Output, ViewChild, TemplateRef, Vi
 import { AnimationEvent } from '@angular/animations';
 import { Subject } from 'rxjs';
 import { fadeInOut, fadeOverlay } from '../../animations/modalAnimations';
+import { ModalRef } from '../../injectors/modal-ref';
+import { ClosingSource } from '../../interfaces';
 
 @Component({
   selector: 'app-modal-wrapper',
@@ -14,21 +16,22 @@ export class ModalWrapperComponent implements AfterViewInit, OnDestroy {
 
     containerReady = new Subject<ViewContainerRef>();
 
-    //@Input() modalOptions?: ModalOptions;
+    @Output() beforeModalClose = new EventEmitter<void>();
     @Output() afterModalClose = new EventEmitter<void>();
  
     isOpen: boolean = false;
     private destroy$ = new Subject<void>();
   
-    constructor() {}
+    constructor(private modalRef: ModalRef) {}
 
     ngAfterViewInit(): void {
         this.containerReady.next(this.container);
         this.containerReady.complete();
     }
 
-    close() {
+    close(source: ClosingSource) {
         this.isOpen = false;
+        this.modalRef.notifyClosed(source);
     }
 
     onAnimationDone(event: AnimationEvent) {

@@ -48,7 +48,14 @@ export class GameService {
         this.gameStatus.next(status);
     }
 
+    resetGame(): void {
+        console.log('RESET GAME')
+        this.resetScore();
+        this.setGameStatus('disabled');
+    }
+
     refreshGame(): void {
+        console.log('REFRESH GAME')
         this.resetScore();
         this.setGameStatus('playing');
     }
