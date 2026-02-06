@@ -10,6 +10,16 @@
 *, *::before, *::after {
     box-sizing: border-box;
 }
+
+@font-face {
+    font-family: "Sega Arcade";
+    src: url("./assets/fonts/SegaArcadeFont-Regular.eot?") format("eot"),
+         url("./assets/fonts/SegaArcadeFont-Regular.woff") format("woff"),
+         url("./assets/fonts/SegaArcadeFont-Regular.ttf") format("truetype"),
+         url("./assets/fonts/SegaArcadeFont-Regular.svg#SegaArcadeFont-Regular") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
  
  main {
     width: 100%;
@@ -27,6 +37,24 @@
     background-color: transparent;
     border: 1px solid #000;
     border-radius: 5px;
+    cursor: pointer;
+
+    &:disabled {
+        color: #808080;
+        background-color: rgba(128, 128, 128, .3);
+        border: 1px solid #808080;
+        cursor: not-allowed;
+    }
+
+    &--sega {
+        font-family: "Sega Arcade";
+        font-size: 24px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 12px 15px;
+        margin-top: 10px;
+        border: 2px solid #000;
+    }
 }
 
 .form {

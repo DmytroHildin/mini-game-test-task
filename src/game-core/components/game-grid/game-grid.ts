@@ -5,6 +5,7 @@ import { delay, of, race, repeat, Subject, switchMap, takeWhile, tap, timer } fr
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModalService } from '../../../ui/services/modal.service';
 import { GameScore } from '../game-score/game-score';
+import { GameResults } from '../game-results/game-results';
 
 @Component({
   selector: 'app-game-grid',
@@ -29,8 +30,6 @@ export class GameGrid implements OnInit {
     }
 
     ngOnInit(): void {
-        this.modalService.open(GameScore)
-
         this.gameGrid = this.initGameGrid();
         console.log(this.gameGrid);
 
@@ -55,16 +54,14 @@ export class GameGrid implements OnInit {
 
     private startNewGame() {
         of({})
-          .pipe(
-              switchMap(() => this.startNextRound()),
-              repeat({ delay: 300 }),
-              takeWhile(() => !this.gameService.isGameOver())
-          )
-          .subscribe(() => {
-              if (this.gameService.isGameOver()) {
-                  this.finishGame();
-              }
-          });
+            .pipe(
+                switchMap(() => this.startNextRound()),
+                repeat({ delay: 300 }),
+                takeWhile(() => !this.gameService.isGameOver())
+            )
+            .subscribe({
+                complete: () => this.finishGame()
+            });
     }
 
     handleClickOnCell(cell: CellState): void {
@@ -129,5 +126,11 @@ export class GameGrid implements OnInit {
 
     private finishGame() {
         this.gameService.setGameStatus('gameover');
+        console.log('finishGame')
+        this.modalService.open(GameResults);
+    }
+
+    modalTest() {
+        this.modalService.open(GameResults);
     }
 }

@@ -48,10 +48,10 @@ export class ModalService {
             modalWrapperInstance.instance.isOpen = true
         })     
         
-        // modalRef.onClose.pipe(
-        //     takeUntil(modalWrapperInstance.instance.destroySubject$)
-        // )
-        // .subscribe(() => modalWrapperInstance.instance.close());
+        modalRef.onClose.pipe(
+            takeUntil(modalWrapperInstance.instance.destroySubject$)
+        )
+        .subscribe(() => modalWrapperInstance.instance.close());
 
         modalWrapperInstance.instance.afterModalClose.pipe(
             takeUntil(modalWrapperInstance.instance.destroySubject$)

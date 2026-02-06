@@ -5,7 +5,23 @@
     margin-left: 15px;
     color: #444;
 
-    &__value {
+    &__player {    
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         font-size: 55px;
+
+        &-name {
+            font-size: 18px;
+        }
+
+        &-score {
+            line-height: 0.9222;
+        }
+    }
+
+    &__hyphen {
+        font-size: 34px;
+        line-height: .93333;
     }
 }

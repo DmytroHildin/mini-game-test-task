@@ -1,5 +1,11 @@
 <div class="game-score">
-    <span class="game-score__value">{{ (gameScore$ | async)?.player }}</span>
-    <span>-</span>
-    <span class="game-score__value">{{ (gameScore$ | async)?.computer }}</span>
+    <div class="game-score__player">
+        <span class="game-score__player-name">You</span>
+        <span class="game-score__player-score">{{ (gameScore$ | async)?.player }}</span>
+    </div>
+    <span class="game-score__hyphen">-</span>
+    <div class="game-score__player">
+        <span class="game-score__player-score">{{ (gameScore$ | async)?.computer }}</span>
+        <span class="game-score__player-name">Computer</span>
+    </div>
 </div>

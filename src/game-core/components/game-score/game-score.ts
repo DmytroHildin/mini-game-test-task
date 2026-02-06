@@ -12,7 +12,7 @@ import { AsyncPipe } from '@angular/common';
 })
 export class GameScore implements OnInit {
 
-    public gameScore$: Observable<Score>|null = null;;
+    public gameScore$: Observable<Score>|null = null;
 
     constructor(private gameService: GameService) {}
 

@@ -9,6 +9,7 @@ import { GameStatus, Score } from '../interfaces';
 export class GameService {
   
     readonly WIN_SCORE: number = 10;
+    private lastRandomCellId: number | null = null;
 
     private timeInMs = new BehaviorSubject<number>(0);
     private score = new BehaviorSubject<Score>({player: 0, computer: 0});
@@ -39,7 +40,7 @@ export class GameService {
         })
     }
 
-    resetScore() {
+    resetScore(): void {
         this.score.next({player: 0, computer: 0});
     }
 
@@ -47,8 +48,20 @@ export class GameService {
         this.gameStatus.next(status);
     }
 
+    refreshGame(): void {
+        this.resetScore();
+        this.setGameStatus('playing');
+    }
+
     chooseRandomCellId(): number {
-        return Math.floor(Math.random() * 100);
+        let newNumber: number;
+
+        do {
+            newNumber = Math.floor(Math.random() * 100);
+        } while (newNumber === this.lastRandomCellId);
+
+        this.lastRandomCellId = newNumber;
+        return newNumber;
     }
 
     isGameOver(): boolean {

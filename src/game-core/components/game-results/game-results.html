@@ -1,0 +1,17 @@
+<div class="game-results">
+    @if((results$ | async)?.player === 10) {
+        <div class="game-results__header">🎉 Congratulations! 🎉 You win</div>
+    } @else {
+        <div class="game-results__header">☹️ Game Over! ☹️</div>
+    }
+
+    <div class="game-results__retry-section">
+        <div class="game-results__score grs">
+            <span class="grs__value">{{(results$ | async)?.player}}</span>
+            <span class="grs__hyphen">:</span>
+            <span class="grs__value">{{(results$ | async)?.computer}}</span>
+        </div>
+        <button class="btn btn--sega game-results__retry-btn"
+                (click)="restartGame()">{{ (results$ | async)?.player === 10 ? 'Play' : 'Try' }} again</button>
+    </div>
+</div>

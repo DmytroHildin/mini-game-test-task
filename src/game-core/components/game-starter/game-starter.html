@@ -25,7 +25,8 @@
             }
         </label>
         
-        <button class="btn game-starter-btn" [disabled]="!gameStarterForm.valid">Start</button>
+        <button class="btn btn--sega" 
+                [disabled]="!gameStarterForm.valid || (gameStatus$ | async) === 'playing'">Start</button>
     </form>
     
 </div>
