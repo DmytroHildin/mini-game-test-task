@@ -3,6 +3,7 @@
           [formGroup]="gameStarterForm" 
           (ngSubmit)="startGame()">
         <label for="time">
+            <span class="game-starter__remark">⏱️Range: 1000 - 1500ms</span>
             <input type="number"
                 id="time"
                 formControlName="time"
