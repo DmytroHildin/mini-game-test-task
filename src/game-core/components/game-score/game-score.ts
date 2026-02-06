@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { Observable } from 'rxjs';
 import { Score } from '../../interfaces';
@@ -9,6 +9,7 @@ import { AsyncPipe } from '@angular/common';
   imports: [AsyncPipe],
   templateUrl: './game-score.html',
   styleUrl: './game-score.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameScore implements OnInit {
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { GameService } from '../../services/game.service';
@@ -14,6 +14,7 @@ import { AsyncPipe } from '@angular/common';
   ],
   templateUrl: './game-starter.html',
   styleUrl: './game-starter.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameStarter implements OnInit {
 

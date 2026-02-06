@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { Score } from '../../interfaces';
 import { Observable } from 'rxjs';
@@ -10,6 +10,7 @@ import { ModalRef } from '../../../ui/injectors/modal-ref';
   imports: [AsyncPipe],
   templateUrl: './game-results.html',
   styleUrl: './game-results.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameResults implements OnInit {
 

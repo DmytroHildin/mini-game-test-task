@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CellState, CellStatus, GameStatus } from '../../interfaces';
 import { GameService } from '../../services/game.service';
 import { Observable, of, race, repeat, Subject, switchMap, takeWhile, tap, timer } from 'rxjs';
@@ -11,6 +11,7 @@ import { ModalRef } from '../../../ui/injectors/modal-ref';
   imports: [],
   templateUrl: './game-grid.html',
   styleUrl: './game-grid.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameGrid implements OnInit {
 
@@ -23,7 +24,8 @@ export class GameGrid implements OnInit {
 
     constructor(
         private gameService: GameService,
-        private modalService: ModalService
+        private modalService: ModalService,
+        private cdr: ChangeDetectorRef
     ) {
     }
 
@@ -33,8 +35,10 @@ export class GameGrid implements OnInit {
 
         this.gameService.gameStatus$.subscribe(status => {
             this.gameStatus = status;
+            this.cdr.markForCheck();
 
             if (status === 'playing') {
+                debugger;
                 this.startNewGame();
             }
         })
@@ -67,7 +71,7 @@ export class GameGrid implements OnInit {
         this.selectedCellId = null;
         const activeCellId = this.gameService.chooseRandomCellId();
 
-        this.setCellStatus(activeCellId, 'active')
+        this.setCellStatus(activeCellId, 'active');
 
         return race(
             this.cellClicked$.pipe(
@@ -92,7 +96,9 @@ export class GameGrid implements OnInit {
                     ? { ...cell, status }
                     : { ...cell, status: 'disabled' }
             )
-          )
+        )
+
+        this.cdr.markForCheck();
     }
 
     private finishGame(): void {
