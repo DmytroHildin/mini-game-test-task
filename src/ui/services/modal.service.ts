@@ -25,7 +25,6 @@ export class ModalService {
                 parent: this.injector
             })
         });
-        console.log(modalWrapperInstance);
 
         this.appRef.attachView(modalWrapperInstance.hostView);
         document.body.appendChild(modalWrapperInstance.location.nativeElement);
@@ -34,7 +33,7 @@ export class ModalService {
             const contentRef = modalWrapperInstance.instance.container.createComponent(content);
         });
 
-        // set to microtask 
+        // set to microtask for running this code after 1 change detection
         Promise.resolve().then(() => {
             modalWrapperInstance.instance.isOpen = true
         })     
@@ -48,7 +47,6 @@ export class ModalService {
             takeUntil(modalWrapperInstance.instance.destroySubject$)
         )
         .subscribe(() => {
-            console.log('CLOSE POPUP');
             this.destroyInstance(modalWrapperInstance)
         });
 

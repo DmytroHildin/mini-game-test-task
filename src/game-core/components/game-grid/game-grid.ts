@@ -32,7 +32,6 @@ export class GameGrid implements OnInit {
 
     ngOnInit(): void {
         this.gameGrid = this.initGameGrid();
-        console.log(this.gameGrid);
 
         this.gameService.timeInMs$.subscribe(ms => this.timeInMs = ms);
 
@@ -40,7 +39,6 @@ export class GameGrid implements OnInit {
             this.gameStatus = status;
 
             if (status === 'playing') {
-                console.log(status);
                 this.startNewGame();
             }
         })
@@ -66,9 +64,7 @@ export class GameGrid implements OnInit {
     }
 
     handleClickOnCell(cell: CellState): void {
-        console.log(cell);
         if (this.gameStatus === 'disabled') return;
-        // if (cell.status !== 'active') return;
 
         this.selectedCellId = cell.id;
         
@@ -77,31 +73,16 @@ export class GameGrid implements OnInit {
     }
 
     private startNextRound() {
-        console.log('NEXT ROUND START')
         this.cellClicked$ = new Subject();
 
         this.selectedCellId = null;
         const activeCellId = this.gameService.chooseRandomCellId();
-        // this.setCellStatus(activeCellId, 'active');
-        // console.log(activeCellId);
 
-        // timer(this.timeInMs)
-        //     .pipe(
-        //         takeUntil(this.cellClicked$)
-        //     )
-        //     .subscribe(() => {
-        //         console.log('failed')
-        //         this.gameService.setScore('computer');
-        //         this.setCellStatus(activeCellId, 'failed');
-
-        //         this.startNextRound();
-        //     })
         this.setCellStatus(activeCellId, 'active')
 
         return race(
             this.cellClicked$.pipe(
                 tap(() => {
-                    console.log('CLICKED IN RACE')
                     this.gameService.setScore(this.selectedCellId === activeCellId ? 'player' : 'computer');
                     this.setCellStatus(activeCellId, this.selectedCellId === activeCellId ? 'success' : 'failed');
                 })

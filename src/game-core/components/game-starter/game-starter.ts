@@ -36,7 +36,6 @@ export class GameStarter implements OnInit {
     }
 
     public startGame(): void {
-        console.log('start');
         this.gameService.setTime(+(this.time?.value ?? 0));
         this.gameService.refreshGame();
     }

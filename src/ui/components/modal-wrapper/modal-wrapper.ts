@@ -35,7 +35,6 @@ export class ModalWrapperComponent implements AfterViewInit, OnDestroy {
     }
 
     onAnimationDone(event: AnimationEvent) {
-        console.log(event)
         if (event.fromState === 'open' && event.toState === 'close' && event.phaseName === 'done') {
             this.afterModalClose.emit();
         }        
