@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CellState, CellStatus, GameStatus } from '../../interfaces';
 import { GameService } from '../../services/game.service';
-import { delay, of, race, repeat, Subject, switchMap, takeWhile, tap, timer } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Observable, of, race, repeat, Subject, switchMap, takeWhile, tap, timer } from 'rxjs';
 import { ModalService } from '../../../ui/services/modal.service';
-import { GameScore } from '../game-score/game-score';
 import { GameResults } from '../game-results/game-results';
 import { ModalRef } from '../../../ui/injectors/modal-ref';
 
@@ -15,9 +13,8 @@ import { ModalRef } from '../../../ui/injectors/modal-ref';
   styleUrl: './game-grid.scss',
 })
 export class GameGrid implements OnInit {
-    readonly GRID_SIZE = 10;
 
-    public gameGrid: CellState[][] = [];
+    public gameGrid!: CellState[][];
     private timeInMs: number = 0;
     public selectedCellId: number|null = null;
     public gameStatus!: GameStatus
@@ -31,8 +28,7 @@ export class GameGrid implements OnInit {
     }
 
     ngOnInit(): void {
-        this.gameGrid = this.initGameGrid();
-
+        this.gameGrid = this.gameService.initGameGrid();
         this.gameService.timeInMs$.subscribe(ms => this.timeInMs = ms);
 
         this.gameService.gameStatus$.subscribe(status => {
@@ -44,17 +40,10 @@ export class GameGrid implements OnInit {
         })
     }
 
-    initGameGrid(): CellState[][] {
-        return Array.from({ length: this.GRID_SIZE }, 
-                          (_, row) => Array.from({ length: this.GRID_SIZE }, 
-                                                 (_, col) => ({id: row * this.GRID_SIZE + col, status: 'disabled'}))
-                        ) 
-    }
-
-    private startNewGame() {
+    private startNewGame(): void {
         of({})
             .pipe(
-                switchMap(() => this.startNextRound()),
+                switchMap(() => this.playNextRound()),
                 repeat({ delay: 300 }),
                 takeWhile(() => !this.gameService.isGameOver())
             )
@@ -72,7 +61,7 @@ export class GameGrid implements OnInit {
         this.cellClicked$.complete();      
     }
 
-    private startNextRound() {
+    private playNextRound(): Observable<void | number> {
         this.cellClicked$ = new Subject();
 
         this.selectedCellId = null;

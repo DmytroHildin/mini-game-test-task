@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { GameStatus, Score } from '../interfaces';
+import { CellState, GameStatus, Score } from '../interfaces';
 
 @Injectable({
     providedIn: 'root',
 })
 export class GameService {
   
+    readonly GRID_SIZE = 10;
     readonly WIN_SCORE: number = 10;
+
     private lastRandomCellId: number | null = null;
 
     private timeInMs = new BehaviorSubject<number>(0);
@@ -27,7 +29,7 @@ export class GameService {
         return this.timeInMs.asObservable();
     }
 
-    setTime(ms: number) {
+    setTime(ms: number): void {
         this.timeInMs.next(ms);
     }
 
@@ -38,6 +40,13 @@ export class GameService {
             ...currentScore, 
             [scorer]: ++currentScore[scorer]
         })
+    }
+
+    initGameGrid(): CellState[][] {
+        return Array.from({ length: this.GRID_SIZE }, 
+                            (_, row) => Array.from({ length: this.GRID_SIZE }, 
+                                                    (_, col) => ({id: row * this.GRID_SIZE + col, status: 'disabled'}))
+                        ) 
     }
 
     resetScore(): void {

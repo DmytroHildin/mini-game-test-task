@@ -1,4 +1,5 @@
-<div class="game-grid" [class.game-grid--disabled]="gameStatus === 'disabled'">
+<div class="game-grid" 
+    [class.game-grid--disabled]="gameStatus === 'disabled'">
     @for (row of gameGrid; track $index) {
         <div class="game-grid__row">
             @for (cell of row; track $index) {

@@ -1,5 +1,4 @@
 import { ApplicationRef, ViewContainerRef, ComponentRef, Injectable, Injector, TemplateRef, Type, EnvironmentInjector, createComponent } from '@angular/core';
-//import { ModalInstance, ModalOptions } from '../interfaces/ui.model';
 import { takeUntil } from 'rxjs';
 import { ModalWrapperComponent } from '../components/modal-wrapper/modal-wrapper';
 import { ModalRef } from '../injectors/modal-ref';
