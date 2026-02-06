@@ -38,7 +38,6 @@ export class GameGrid implements OnInit {
             this.cdr.markForCheck();
 
             if (status === 'playing') {
-                debugger;
                 this.startNewGame();
             }
         })
