@@ -3,6 +3,8 @@ import { CellState, CellStatus, GameStatus } from '../../interfaces';
 import { GameService } from '../../services/game.service';
 import { delay, of, race, repeat, Subject, switchMap, takeWhile, tap, timer } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ModalService } from '../../../ui/services/modal.service';
+import { GameScore } from '../game-score/game-score';
 
 @Component({
   selector: 'app-game-grid',
@@ -20,10 +22,15 @@ export class GameGrid implements OnInit {
 
     private cellClicked$!: Subject<void>;
 
-    constructor(private gameService: GameService) {
+    constructor(
+        private gameService: GameService,
+        private modalService: ModalService
+    ) {
     }
 
     ngOnInit(): void {
+        this.modalService.open(GameScore)
+
         this.gameGrid = this.initGameGrid();
         console.log(this.gameGrid);
 
