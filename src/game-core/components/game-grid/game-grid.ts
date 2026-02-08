@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CellState, CellStatus, GameStatus } from '../../interfaces';
 import { GameService } from '../../services/game.service';
-import { Observable, of, race, repeat, Subject, switchMap, takeWhile, tap, timer } from 'rxjs';
+import { Observable, of, race, repeat, Subject, switchMap, takeUntil, takeWhile, tap, timer } from 'rxjs';
 import { ModalService } from '../../../ui/services/modal.service';
 import { GameResults } from '../game-results/game-results';
 import { ModalRef } from '../../../ui/injectors/modal-ref';
@@ -22,6 +22,7 @@ export class GameGrid implements OnInit {
     private timeInMs: number = 0;
 
     private cellClicked$!: Subject<void>;
+    private destroy$ = new Subject<void>();
 
     constructor(
         private gameService: GameService,
@@ -44,12 +45,18 @@ export class GameGrid implements OnInit {
         })
     }
 
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
     private startNewGame(): void {
         of({})
             .pipe(
                 switchMap(() => this.playNextRound()),
                 repeat({ delay: 400 }),
-                takeWhile(() => !this.gameService.isGameOver())
+                takeWhile(() => !this.gameService.isGameOver()),
+                takeUntil(this.destroy$)
             )
             .subscribe({
                 complete: () => this.finishGame()
