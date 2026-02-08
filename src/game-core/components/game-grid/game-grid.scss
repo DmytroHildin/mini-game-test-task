@@ -4,6 +4,7 @@
     }
 
     &__cell {
+        position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -24,13 +25,30 @@
         }
 
         &--failed {
-            background: linear-gradient(135deg, #ff512f 0%, #ff0000 100%);
+            background: #ff0000;
+            background-image: url('../../../assets/explosion.gif');
+            background-size: contain;
             opacity: 1;
+            pointer-events: none;
         }
 
         &--success {
             background: linear-gradient(135deg, #5bff00 0%, #208520 100%);
             opacity: 1;
+            pointer-events: none;
+
+            &:after {
+                content: "";
+                position: absolute;
+                top: 48%;
+                left: 50%;
+                width: 65%;
+                height: 65%;
+                background-image: url('../../../assets/plus_one.gif');
+                background-size: contain;
+                background-repeat: no-repeat;
+                translate: -50% -50%;
+            }
         }
 
         &--selected {

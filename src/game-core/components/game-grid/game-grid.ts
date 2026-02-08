@@ -16,9 +16,10 @@ import { ModalRef } from '../../../ui/injectors/modal-ref';
 export class GameGrid implements OnInit {
 
     public gameGrid!: CellState[][];
-    private timeInMs: number = 0;
     public selectedCellId: number|null = null;
+
     public gameStatus!: GameStatus
+    private timeInMs: number = 0;
 
     private cellClicked$!: Subject<void>;
 
@@ -47,7 +48,7 @@ export class GameGrid implements OnInit {
         of({})
             .pipe(
                 switchMap(() => this.playNextRound()),
-                repeat({ delay: 300 }),
+                repeat({ delay: 400 }),
                 takeWhile(() => !this.gameService.isGameOver())
             )
             .subscribe({
@@ -106,6 +107,7 @@ export class GameGrid implements OnInit {
 
         modalRef.onClose().subscribe(source => {
             if (source !== 'content') {
+                this.gameGrid = this.gameService.initGameGrid();
                 this.gameService.resetGame();
             }            
         })
